@@ -3,6 +3,7 @@
 let input = document.querySelector('input');
 const form = document.querySelector('form');
 const btn = document.querySelectorAll('[type="button"]');
+const btn_remove = document.querySelector('#remove');
 let counter = 0;
 let tmp;
 
@@ -66,14 +67,35 @@ function init(){
 btn.forEach(elem => {
     elem.addEventListener('click',e => {
         e.preventDefault();
-        input.value += elem.textContent;
+        if(input.value.length < 4){
+            input.value += elem.textContent;
+        }
+        
         
     });
 });
 form.addEventListener('submit',e => {
     e.preventDefault();
-    setPassword(input.value);
-    checkPassword(input.value);
-    input.value = '';
+    if(input.value.length == 4){
+        setPassword(input.value);
+        checkPassword(input.value);
+        input.value = '';
+    }else{
+        input.setAttribute('placeholder','Введите 4 символа');
+        input.style.cssText += 'border:6px solid #bf4545'; 
+        input.value = '';
+        setTimeout(() => {
+            input.style.cssText += 'border:6px solid #767b94';
+            input.setAttribute('placeholder','Введите пин-код');
+    },2000);
+
+    }
+    
 });
+
+btn_remove.addEventListener('click',e => {
+    e.preventDefault();
+    input.value = input.value.slice(0,input.value.length-1);
+});
+
 init();
